@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>２０の質問性格判断（音声・テキスト）性格判断</title>
+  <style>
+    :root{
+      --bg1:#f6fbff;
+      --bg2:#fff7f0;
+      --card:#ffffffcc;
+      --text:#1a2b3c;
+      --muted:#5c7288;
+      --accent:#2b8cff;
+      --accent2:#ff7a59;
+      --ok:#1fbf75;
+      --warn:#ffb020;
+      --danger:#ff4d6d;
+      --shadow: 0 12px 30px rgba(20,40,70,.10);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(43,140,255,.16), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(255,122,89,.14), transparent 55%),
+        linear-gradient(140deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+    }
+    .wrap{
+      width:min(1100px, 96vw);
+      padding:22px 14px 40px;
+      display:grid;
+      gap:14px;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      background:var(--card);
+      border:1px solid rgba(40,80,120,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.02em;
+    }
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .toggles{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background:#ffffffaa;
+      border:1px solid rgba(40,80,120,.12);
+    }
+    .pill label{font-size:12px;color:var(--muted)}
+    .pill input[type="checkbox"]{transform: translateY(1px);}
+    main{
+      display:grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 920px){
+      main{grid-template-columns:1fr}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(40,80,120,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(40,80,120,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card .hd h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.02em;
+      color:var(--muted);
+    }
+    .card .bd{ padding:16px; }
+    .grid{
+      display:grid; gap:12px;
+    }
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .row > *{flex: 1 1 auto;}
+    input[type="text"], input[type="number"], textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(40,80,120,.18);
+      background:#fff;
+      color:var(--text);
+      outline:none;
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+    }
+    textarea{min-height:96px; resize:vertical;}
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(43,140,255,.55);
+      box-shadow: 0 0 0 4px rgba(43,140,255,.12);
+    }
+    .btns{display:flex; gap:10px; flex-wrap:wrap;}
+    button{
+      border:0;
+      border-radius:14px;
+      padding:11px 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
+      box-shadow: 0 10px 22px rgba(43,140,255,.16);
+    }
+    button:active{transform: translateY(1px);}
+    .primary{
+      background: linear-gradient(135deg, var(--accent), #61a8ff);
+      color:white;
+    }
+    .secondary{
+      background: linear-gradient(135deg, #ffffff, #f3f8ff);
+      border:1px solid rgba(43,140,255,.22);
+      color:var(--accent);
+      box-shadow: none;
+    }
+    .danger{
+      background: linear-gradient(135deg, var(--danger), #ff7b95);
+      color:white;
+      box-shadow: 0 10px 22px rgba(255,77,109,.16);
+    }
+    .ghost{
+      background:transparent;
+      border:1px dashed rgba(40,80,120,.25);
+      color:var(--muted);
+      box-shadow:none;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .progress{
+      height:10px;
+      background:rgba(40,80,120,.10);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--ok), var(--accent));
+      border-radius:999px;
+      transition: width .25s ease;
+    }
+    .chat{
+      display:grid;
+      gap:10px;
+      max-height:520px;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .bubble{
+      border-radius:16px;
+      padding:10px 12px;
+      border:1px solid rgba(40,80,120,.10);
+      background:#fff;
+      box-shadow: 0 8px 18px rgba(20,40,70,.06);
+      line-height:1.55;
+      font-size:14px;
+      word-break:break-word;
+    }
+    .me{
+      background: linear-gradient(180deg, #ffffff, #f7fbff);
+      border-color: rgba(43,140,255,.15);
+    }
+    .ai{
+      background: linear-gradient(180deg, #ffffff, #fff7f2);
+      border-color: rgba(255,122,89,.18);
+    }
+    .meta{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(43,140,255,.10);
+      color: var(--accent);
+      border:1px solid rgba(43,140,255,.18);
+      font-size:12px;
+      font-weight:700;
+    }
+    .tag.orange{
+      background: rgba(255,122,89,.10);
+      color: var(--accent2);
+      border-color: rgba(255,122,89,.18);
+    }
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width:520px){ .twoCol{grid-template-columns:1fr} }
+
+    .resultGrid{
+      display:grid;
+      gap:12px;
+    }
+    .scoreRow{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid rgba(40,80,120,.10);
+    }
+    .scoreRow b{font-size:13px;}
+    .scoreRow .s{
+      font-variant-numeric: tabular-nums;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .small{
+      font-size:12px; color:var(--muted); line-height:1.55;
+    }
+    canvas{
+      width:100%;
+      height:auto;
+      border-radius:16px;
+      background: linear-gradient(180deg, #ffffff, #f9fbff);
+      border:1px solid rgba(40,80,120,.10);
+      box-shadow: 0 8px 18px rgba(20,40,70,.06);
+    }
+    .notice{
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(255,176,32,.12);
+      border:1px solid rgba(255,176,32,.22);
+      color:#7a4b00;
+      font-size:12px;
+      line-height:1.55;
+    }
+    .oknotice{
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(31,191,117,.10);
+      border:1px solid rgba(31,191,117,.20);
+      color:#0b5c35;
+      font-size:12px;
+      line-height:1.55;
+    }
+    .divider{
+      height:1px; background:rgba(40,80,120,.10); margin:12px 0;
+    }
+  </style>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#2b8cff">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="性格判断">
+  <meta name="description" content="20の質問で性格傾向を可視化（音声・テキスト）。ホーム画面に追加できるPWA版。">
+
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>２０の質問性格判断（音声・テキスト）性格判断</h1>
+        <p>会話のやり取りの内容から性格を判断して、明るくシンプルにアドバイスします。</p>
+      </div>
+      <div class="toggles">
+        <div class="pill">
+          <label for="mode">入力</label>
+          <select id="mode" aria-label="入力モード">
+            <option value="text">テキスト</option>
+            <option value="voice">音声</option>
+          </select>
+        </div>
+        <div class="pill">
+          <label><input id="speak" type="checkbox" checked /> 音声で読み上げ</label>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Left: Interview -->
+      <section class="card">
+        <div class="hd">
+          <h2>質問セッション</h2>
+          <span class="tag" id="statusTag">準備中</span>
+        </div>
+        <div class="bd">
+          <div class="grid">
+            <div class="twoCol">
+              <div>
+                <label class="hint">ニックネーム（必須）</label>
+                <input id="nickname" type="text" placeholder="例）トニー" />
+              </div>
+              <div>
+                <label class="hint">年齢（必須）</label>
+                <input id="age" type="number" min="0" max="120" placeholder="例）28" />
+              </div>
+            </div>
+
+            <div class="notice" id="voiceNotice" style="display:none;">
+              ※音声入力はブラウザ対応が必要です。Chrome系で動作しやすいです。<br/>
+              マイク許可が求められたら「許可」を選んでください。
+            </div>
+
+            <div class="oknotice" id="readyNotice">
+              入力モードを選び、ニックネームと年齢を入れたら「開始」を押してください。<br/>
+              途中で入力モードは切り替えできます。
+            </div>
+
+            <div class="progress" aria-label="進捗">
+              <div class="bar" id="progressBar"></div>
+            </div>
+            <div class="row" style="justify-content:space-between;">
+              <div class="hint" id="progressText">0 / 20</div>
+              <div class="hint" id="questionLabel">質問：—</div>
+            </div>
+
+            <div class="chat" id="chat"></div>
+
+            <div id="inputArea" class="grid">
+              <textarea id="answerText" placeholder="ここに回答を入力…（短くてもOK）"></textarea>
+              <div class="btns">
+                <button class="primary" id="startBtn">開始</button>
+                <button class="secondary" id="listenBtn" style="display:none;">🎤 録音開始</button>
+                <button class="secondary" id="stopBtn" style="display:none;">■ 録音停止</button>
+                <button class="primary" id="sendBtn" disabled>回答を送信</button>
+                <button class="ghost" id="skipBtn" disabled>スキップ</button>
+                <button class="danger" id="resetBtn">リセット</button>
+              </div>
+              <div class="hint">
+                コツ：思いついたことを素直に。正解/不正解はありません。<br/>
+                ※占い・統計学（誕生日など）は使わず、回答内容だけで判断します。
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Results -->
+      <aside class="card">
+        <div class="hd">
+          <h2>総合評価（20問終了後）</h2>
+          <span class="tag orange" id="resultTag">未作成</span>
+        </div>
+        <div class="bd">
+          <div class="grid">
+            <canvas id="radar" width="620" height="520" aria-label="レーダーチャート"></canvas>
+
+            <div class="resultGrid" id="resultArea">
+              <div class="small">20問回答すると、7項目の評価（各100文字以内）とアドバイスが表示されます。</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+<script>
+(() => {
+  // -----------------------------
+  // 20 Questions (important points included)
+  // -----------------------------
+  const QUESTIONS = [
+    "最近、少し頑張ったことは何？どんな工夫をした？",
+    "決断するとき、まず何を優先する？（時間・安心・結果・楽しさなど）",
+    "うまくいかなかった時、最初にどう立て直す？",
+    "新しいことを始める時、ワクワクと不安の割合は？理由も少し。",
+    "人と話すとき、聞く派？話す派？その理由は？",
+    "褒められたらどう感じる？どう返すことが多い？",
+    "忙しいとき、心の余裕を作る方法は？",
+    "目標を立てるなら、期限は必要？それとも気分？",
+    "お金の使い方で大事にしていることは？（経験・安心・投資・楽しさ）",
+    "仕事（or活動）で「これだけは譲れない」と思う価値観は？",
+    "チームで動くとき、あなたはどんな役割になりやすい？",
+    "失敗を人に話すとき、どんな伝え方をする？",
+    "恋愛（または親しい関係）で大事にしたいことは？",
+    "相手に不満があるとき、どう伝えるタイプ？",
+    "好きになったら、積極的？慎重？その理由は？",
+    "ストレスのサインはどこに出る？（体・気分・行動）",
+    "落ち込んだとき、回復のスイッチは何？",
+    "あなたの強みを1つだけ挙げるなら？具体例も少し。",
+    "逆に、直したいクセ（課題）は？今どう工夫してる？",
+    "この先3ヶ月で、少しでも良くしたいことは何？最初の一歩は？"
+  ];
+
+  // 7 Traits
+  const TRAITS = [
+    { key:"motivation",   label:"やる気" },
+    { key:"business",     label:"ビジネス" },
+    { key:"love",         label:"恋愛" },
+    { key:"communication",label:"コミュ力" },
+    { key:"creativity",   label:"創造性" },
+    { key:"resilience",   label:"回復力" },
+    { key:"balance",      label:"バランス" },
+  ];
+
+  // Keyword sets for light scoring (Japanese)
+  const KW = {
+    positive: ["楽しい","嬉しい","ワクワク","成長","挑戦","やってみる","できる","改善","工夫","前向き","学ぶ","続ける","習慣"],
+    negative: ["無理","だめ","嫌","疲れ","不安","怖い","面倒","あきらめ","どうでも","できない","無気力","イライラ"],
+    goal: ["目標","期限","計画","優先","段取り","スケジュール","成果","結果","KPI","達成","効率","整理"],
+    people: ["相手","人","友達","家族","仲間","チーム","聞く","伝える","共感","相談","協力","配慮"],
+    love: ["恋","好き","付き合","結婚","デート","連絡","距離","信頼","安心","尊重","束縛","嫉妬"],
+    money: ["お金","投資","貯金","節約","買う","使う","価値","経験","安心"],
+    create: ["アイデア","発想","作る","試す","新しい","工夫","改善","変える","面白い"],
+    recover: ["休む","切り替え","散歩","睡眠","運動","深呼吸","相談","書く","泣く","整える","回復"]
+  };
+
+  // Aizuuchi + simple impression templates
+  const AIZUCHI = ["うんうん。","なるほど！","いいね。","わかる。","たしかに。","それ大事。","面白い視点だね。","いい感じ。"];
+  const IMPRESS = [
+    "今の言い方、誠実さが出てる。",
+    "ちゃんと自分の軸があるね。",
+    "視点が具体的でイメージしやすい。",
+    "気持ちの整理が上手そう。",
+    "バランス感覚がある答え方だね。",
+    "行動に落とせてるのが強い。",
+    "相手目線も入ってて素敵。",
+    "伸びしろを自覚してるのが良い。"
+  ];
+
+  // -----------------------------
+  // State
+  // -----------------------------
+  const state = {
+    started: false,
+    finished: false,
+    qIndex: 0,
+    answers: [],
+    nickname: "",
+    age: null,
+    inputMode: "text",
+    speak: true,
+    recognizing: false
+  };
+
+  // -----------------------------
+  // Elements
+  // -----------------------------
+  const el = {
+    mode: document.getElementById("mode"),
+    speak: document.getElementById("speak"),
+    nickname: document.getElementById("nickname"),
+    age: document.getElementById("age"),
+    startBtn: document.getElementById("startBtn"),
+    sendBtn: document.getElementById("sendBtn"),
+    skipBtn: document.getElementById("skipBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    listenBtn: document.getElementById("listenBtn"),
+    stopBtn: document.getElementById("stopBtn"),
+    answerText: document.getElementById("answerText"),
+    chat: document.getElementById("chat"),
+    progressBar: document.getElementById("progressBar"),
+    progressText: document.getElementById("progressText"),
+    questionLabel: document.getElementById("questionLabel"),
+    statusTag: document.getElementById("statusTag"),
+    radar: document.getElementById("radar"),
+    resultArea: document.getElementById("resultArea"),
+    resultTag: document.getElementById("resultTag"),
+    voiceNotice: document.getElementById("voiceNotice"),
+    readyNotice: document.getElementById("readyNotice"),
+  };
+
+  // -----------------------------
+  // Voice (Web Speech API)
+  // -----------------------------
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+
+  function canUseVoice(){
+    return !!SpeechRecognition;
+  }
+
+  function initRecognition(){
+    if(!canUseVoice()) return null;
+    const r = new SpeechRecognition();
+    r.lang = "ja-JP";
+    r.interimResults = true;
+    r.continuous = true;
+
+    r.onstart = () => {
+      state.recognizing = true;
+      updateVoiceButtons();
+      addSystemBubble("🎤 録音中… 話した内容が入力欄に反映されます。");
+    };
+
+    r.onend = () => {
+      state.recognizing = false;
+      updateVoiceButtons();
+    };
+
+    r.onerror = (e) => {
+      state.recognizing = false;
+      updateVoiceButtons();
+      addSystemBubble("音声入力でエラーが発生しました。マイク許可やブラウザ対応を確認してください。");
+      console.warn(e);
+    };
+
+    r.onresult = (event) => {
+      let finalText = "";
+      let interimText = "";
+      for(let i=event.resultIndex; i<event.results.length; i++){
+        const txt = event.results[i][0].transcript;
+        if(event.results[i].isFinal) finalText += txt;
+        else interimText += txt;
+      }
+      const current = el.answerText.value.trim();
+      const merged = (current ? current + " " : "") + finalText + interimText;
+      el.answerText.value = merged.trim();
+      updateSendEnabled();
+    };
+
+    return r;
+  }
+
+  function startListening(){
+    if(!recognition) recognition = initRecognition();
+    if(!recognition){
+      addSystemBubble("このブラウザでは音声入力が使えないみたいです。テキスト入力で進めよう。");
+      return;
+    }
+    try{ recognition.start(); } catch(_) {}
+  }
+
+  function stopListening(){
+    if(recognition && state.recognizing){
+      recognition.stop();
+    }
+  }
+
+  function speak(text){
+    if(!state.speak) return;
+    if(!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP";
+    u.rate = 1.02;
+    u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  }
+
+  // -----------------------------
+  // UI Helpers
+  // -----------------------------
+  function nowTime(){
+    const d = new Date();
+    return d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+  }
+  function addBubble(text, who="ai"){
+    const b = document.createElement("div");
+    b.className = "bubble " + (who==="me" ? "me" : (who==="sys" ? "ai" : "ai"));
+    b.innerHTML = text.replace(/\n/g,"<br/>");
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.innerHTML = `<span>${who==="me" ? "あなた" : (who==="sys" ? "システム" : "アシスタント")}</span><span>${nowTime()}</span>`;
+    b.appendChild(meta);
+    el.chat.appendChild(b);
+    el.chat.scrollTop = el.chat.scrollHeight;
+  }
+  function addSystemBubble(text){ addBubble(text, "sys"); }
+
+  function setStatus(text, kind="normal"){
+    el.statusTag.textContent = text;
+    el.statusTag.style.borderColor = kind==="ok" ? "rgba(31,191,117,.25)" : (kind==="warn" ? "rgba(255,176,32,.30)" : "rgba(43,140,255,.22)");
+    el.statusTag.style.background = kind==="ok" ? "rgba(31,191,117,.12)" : (kind==="warn" ? "rgba(255,176,32,.12)" : "rgba(43,140,255,.10)");
+    el.statusTag.style.color = kind==="ok" ? "#0b5c35" : (kind==="warn" ? "#7a4b00" : "var(--accent)");
+  }
+
+  function updateProgress(){
+    const done = Math.min(state.qIndex, 20);
+    const pct = (done / 20) * 100;
+    el.progressBar.style.width = pct + "%";
+    el.progressText.textContent = `${done} / 20`;
+    el.questionLabel.textContent = state.started && !state.finished ? `質問：${state.qIndex+1}` : "質問：—";
+  }
+
+  function updateSendEnabled(){
+    const ok = state.started && !state.finished && el.answerText.value.trim().length > 0;
+    el.sendBtn.disabled = !ok;
+  }
+
+  function updateControls(){
+    el.skipBtn.disabled = !(state.started && !state.finished);
+    updateSendEnabled();
+  }
+
+  function updateVoiceButtons(){
+    const voice = state.inputMode === "voice";
+    el.voiceNotice.style.display = voice ? "block" : "none";
+    el.listenBtn.style.display = voice ? "inline-flex" : "none";
+    el.stopBtn.style.display = voice ? "inline-flex" : "none";
+    el.listenBtn.disabled = state.recognizing;
+    el.stopBtn.disabled = !state.recognizing;
+  }
+
+  // -----------------------------
+  // Scoring
+  // -----------------------------
+  function countHits(text, list){
+    let c = 0;
+    for(const w of list){
+      if(text.includes(w)) c++;
+    }
+    return c;
+  }
+
+  function normalizeScore(x){ return Math.max(0, Math.min(100, Math.round(x))); }
+
+  function computeTraitScores(answers){
+    // Start at 50 and adjust by keywords + answer richness
+    const joined = answers.join(" ");
+    const lenBonus = Math.min(12, Math.floor(joined.length / 120)); // 0..12
+
+    const pos = countHits(joined, KW.positive);
+    const neg = countHits(joined, KW.negative);
+    const goal = countHits(joined, KW.goal);
+    const ppl  = countHits(joined, KW.people);
+    const lov  = countHits(joined, KW.love);
+    const mon  = countHits(joined, KW.money);
+    const cre  = countHits(joined, KW.create);
+    const rec  = countHits(joined, KW.recover);
+
+    // Question-specific nudges (light)
+    const byQ = (idx) => (answers[idx] || "");
+    const qGoal = countHits(byQ(7) + " " + byQ(19), KW.goal);
+    const qBiz  = countHits(byQ(8) + " " + byQ(9) + " " + byQ(10), KW.goal.concat(KW.money));
+    const qLove = countHits(byQ(12) + " " + byQ(13) + " " + byQ(14), KW.love.concat(KW.people));
+    const qRes  = countHits(byQ(2) + " " + byQ(16) + " " + byQ(17), KW.recover.concat(["立て直","切り替","復活","寝","休"]));
+    const qCom  = countHits(byQ(4) + " " + byQ(5) + " " + byQ(11) + " " + byQ(13), KW.people);
+    const qCre  = countHits(byQ(0) + " " + byQ(3) + " " + byQ(18), KW.create.concat(["工夫","改善","試"]));
+    const qBal  = countHits(byQ(6) + " " + byQ(15), ["余裕","整","休","睡眠","運動","散歩","切り替","境界","ほどほど"]);
+
+    const scores = {};
+    scores.motivation    = normalizeScore(50 + lenBonus + pos*3 - neg*3 + qGoal*6 + goal*2);
+    scores.business      = normalizeScore(50 + lenBonus + goal*4 + mon*3 + qBiz*6 - neg*2);
+    scores.love          = normalizeScore(50 + lenBonus + ppl*2 + lov*5 + qLove*6 - neg*2);
+    scores.communication = normalizeScore(50 + lenBonus + ppl*5 + qCom*5 + pos*1 - neg*2);
+    scores.creativity    = normalizeScore(50 + lenBonus + cre*6 + qCre*6 + pos*1);
+    scores.resilience    = normalizeScore(50 + lenBonus + rec*6 + qRes*6 - neg*1);
+    scores.balance       = normalizeScore(50 + lenBonus + qBal*8 + rec*2 - neg*2 + pos*1);
+
+    // keep within [20, 95] if extremely sparse
+    const totalLen = joined.replace(/\s/g,"").length;
+    if(totalLen < 40){
+      for(const k in scores) scores[k] = normalizeScore(45 + lenBonus);
+    }
+    return scores;
+  }
+
+  function evaluationText(label, score){
+    // <= 100 chars in Japanese (hard-limit by intent)
+    if(score >= 85) return `${label}はかなり強い。自分の型を持ち、伸ばし方も分かっているタイプ。`;
+    if(score >= 70) return `${label}は安定して高め。調子の波を小さくするとさらに伸びる。`;
+    if(score >= 55) return `${label}は標準〜やや強め。場面に応じて出し分けできる。`;
+    if(score >= 40) return `${label}は伸びしろ大。小さく試して成功体験を増やすと良い。`;
+    return `${label}は今は控えめ。負担を減らし、1つだけ続ける習慣が鍵。`;
+  }
+
+  function adviceText(key, score){
+    // Advice can be longer, but keep it readable and concrete
+    const base = {
+      motivation: [
+        "「最初の一歩」を5分で終わる形に分解しよう。",
+        "やる気は後から来るタイプ。着手のハードルを下げてOK。",
+        "記録（チェック）を付けると継続が一気に楽になる。"
+      ],
+      business: [
+        "価値観（譲れない軸）を言語化して、判断の迷いを減らそう。",
+        "段取りはテンプレ化が効く。毎回のゼロからを減らす。",
+        "成果は『量×質×継続』。まず量を小さく積むのが強い。"
+      ],
+      love: [
+        "大事にしたい条件を3つに絞って、伝え方を柔らかくすると◎。",
+        "不満は“事実→気持ち→希望”の順で話すと摩擦が減る。",
+        "距離感の合意が鍵。連絡頻度や一人時間を先に話そう。"
+      ],
+      communication: [
+        "相づち＋要約（つまり〜だね）を入れると信頼が上がる。",
+        "質問は『なぜ』より『どうしたい？』が前向きになりやすい。",
+        "言いにくい話は短く・具体的に・結論からが強い。"
+      ],
+      creativity: [
+        "アイデアは“未完成のままメモ”が最強。評価は後でOK。",
+        "月1で『新しい体験』を入れると発想の材料が増える。",
+        "小さく試す→学ぶ→改善、のループを速く回そう。"
+      ],
+      resilience: [
+        "回復スイッチ（睡眠/散歩/相談など）を固定の儀式にしよう。",
+        "落ち込みは“体→環境→思考”の順に整えると戻りやすい。",
+        "自分責めの言葉を、次の一手の言葉に置き換えると強い。"
+      ],
+      balance: [
+        "忙しい日は『やらないリスト』を先に決めると心が守れる。",
+        "休むのも予定に入れる。回復はタスクの一部。",
+        "境界線（仕事/私用）を時間で区切ると安定する。"
+      ],
+    };
+
+    const picks = base[key] || ["小さく試して、合うやり方を見つけよう。"];
+    if(score >= 75) return "強みを武器にする時期：" + picks[1];
+    if(score >= 55) return "伸ばし方：" + picks[0];
+    return "立て直しのコツ：" + picks[2];
+  }
+
+  function randomPick(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  function shortImpression(answer){
+    // Simple impression based on length + keywords
+    const t = answer.trim();
+    const pos = countHits(t, KW.positive);
+    const neg = countHits(t, KW.negative);
+    const goal = countHits(t, KW.goal);
+    const ppl = countHits(t, KW.people);
+    if(t.length >= 70 && (goal + ppl) >= 1) return "具体的で、説得力がある答えだね。";
+    if(pos >= 2) return "前向きさが伝わってくるよ。";
+    if(neg >= 2) return "正直に言えるのが強み。今の状態を把握できてる。";
+    if(goal >= 1) return "考え方が整理されていて、行動に繋がりやすそう。";
+    if(ppl >= 1) return "相手目線が入っていて、やさしい答え方だね。";
+    return randomPick(IMPRESS);
+  }
+
+  // -----------------------------
+  // Radar Chart (no libraries)
+  // -----------------------------
+  function drawRadar(scores){
+    const ctx = el.radar.getContext("2d");
+    const W = el.radar.width, H = el.radar.height;
+    ctx.clearRect(0,0,W,H);
+
+    // layout
+    const cx = W/2, cy = H/2 + 10;
+    const radius = Math.min(W, H) * 0.34;
+    const rings = 5;
+
+    // soft grid
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // background rings
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(40,80,120,.18)";
+    for(let r=1; r<=rings; r++){
+      const rr = radius * (r / rings);
+      polygon(ctx, TRAITS.length, rr, -Math.PI/2);
+      ctx.stroke();
+    }
+
+    // axes + labels
+    ctx.strokeStyle = "rgba(40,80,120,.22)";
+    ctx.fillStyle = "rgba(26,43,60,.92)";
+    ctx.font = "13px ui-sans-serif, system-ui, -apple-system, 'Noto Sans JP', sans-serif";
+    for(let i=0; i<TRAITS.length; i++){
+      const ang = -Math.PI/2 + i*(2*Math.PI/TRAITS.length);
+      const x = Math.cos(ang)*radius;
+      const y = Math.sin(ang)*radius;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(x,y);
+      ctx.stroke();
+
+      // label position
+      const lx = Math.cos(ang)*(radius + 28);
+      const ly = Math.sin(ang)*(radius + 28);
+      const text = TRAITS[i].label;
+      const align = (Math.cos(ang) > 0.25) ? "left" : (Math.cos(ang) < -0.25) ? "right" : "center";
+      ctx.textAlign = align;
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, lx, ly);
+    }
+
+    // data polygon
+    const pts = [];
+    for(let i=0;i<TRAITS.length;i++){
+      const key = TRAITS[i].key;
+      const v = (scores[key] ?? 50) / 100; // 0..1
+      const ang = -Math.PI/2 + i*(2*Math.PI/TRAITS.length);
+      pts.push([Math.cos(ang)*radius*v, Math.sin(ang)*radius*v]);
+    }
+
+    // fill
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(43,140,255,.18)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(43,140,255,.85)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // points
+    ctx.fillStyle = "rgba(255,122,89,.90)";
+    for(const [x,y] of pts){
+      ctx.beginPath();
+      ctx.arc(x,y,4,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    // title
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(92,114,136,.95)";
+    ctx.font = "12px ui-sans-serif, system-ui, -apple-system, 'Noto Sans JP', sans-serif";
+    ctx.fillText("7項目レーダーチャート（0〜100）", 0, -radius - 46);
+
+    ctx.restore();
+  }
+
+  function polygon(ctx, n, r, startAng){
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const a = startAng + i*(2*Math.PI/n);
+      const x = Math.cos(a)*r;
+      const y = Math.sin(a)*r;
+      if(i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+  }
+
+  // -----------------------------
+  // Flow
+  // -----------------------------
+  function validateProfile(){
+    const nick = el.nickname.value.trim();
+    const age = Number(el.age.value);
+    if(!nick) return { ok:false, msg:"ニックネームを入れてね。" };
+    if(!Number.isFinite(age) || age <= 0) return { ok:false, msg:"年齢を数字で入れてね。" };
+    return { ok:true, nick, age };
+  }
+
+  function askCurrentQuestion(){
+    const q = QUESTIONS[state.qIndex];
+    addBubble(`Q${state.qIndex+1}. ${q}`, "ai");
+    speak(`質問${state.qIndex+1}。${q}`);
+    el.answerText.value = "";
+    updateSendEnabled();
+    updateProgress();
+    setStatus(`質問 ${state.qIndex+1} / 20`, "normal");
+  }
+
+  function startSession(){
+    if(state.started) return;
+    const v = validateProfile();
+    if(!v.ok){
+      addSystemBubble(v.msg);
+      speak(v.msg);
+      return;
+    }
+    state.nickname = v.nick;
+    state.age = v.age;
+
+    state.started = true;
+    state.finished = false;
+    state.qIndex = 0;
+    state.answers = [];
+
+    el.readyNotice.style.display = "none";
+    setStatus("開始しました", "ok");
+
+    addBubble(`こんにちは、${escapeHtml(state.nickname)}さん！今日は20の質問で性格の傾向を見ていくよ。気楽にいこう。`, "ai");
+    speak(`こんにちは、${state.nickname}さん。今日は20の質問で性格の傾向を見ていくよ。気楽にいこう。`);
+    askCurrentQuestion();
+    updateControls();
+  }
+
+  function submitAnswer(answerRaw, skipped=false){
+    if(!state.started || state.finished) return;
+
+    const answer = (answerRaw || "").trim();
+    if(!skipped && !answer){
+      addSystemBubble("回答が空みたい。短くてもOKだよ。");
+      speak("回答が空みたい。短くてもOKだよ。");
+      return;
+    }
+
+    // store
+    const stored = skipped ? "（スキップ）" : answer;
+    state.answers.push(stored);
+
+    // show user bubble
+    addBubble(skipped ? "（スキップ）" : escapeHtml(answer), "me");
+
+    // aizuuchi + simple impression
+    const a = randomPick(AIZUCHI);
+    const imp = skipped ? "OK、飛ばして次へいこう。" : shortImpression(answer);
+    const reply = `${a} ${imp}`;
+    addBubble(reply, "ai");
+    speak(reply);
+
+    // next
+    state.qIndex++;
+    updateProgress();
+
+    if(state.qIndex >= QUESTIONS.length){
+      finishSession();
+    } else {
+      askCurrentQuestion();
+    }
+    updateControls();
+  }
+
+  function finishSession(){
+    state.finished = true;
+    setStatus("20問 完了！", "ok");
+    el.resultTag.textContent = "作成完了";
+    el.resultTag.style.background = "rgba(31,191,117,.12)";
+    el.resultTag.style.borderColor = "rgba(31,191,117,.22)";
+    el.resultTag.style.color = "#0b5c35";
+
+    stopListening();
+
+    addBubble("おつかれさま！ここまでの回答から、7項目で総合評価してみるね。", "ai");
+    speak("おつかれさま！ここまでの回答から、7項目で総合評価してみるね。");
+
+    const scores = computeTraitScores(state.answers);
+    drawRadar(scores);
+    renderResults(scores);
+
+    el.sendBtn.disabled = true;
+    el.skipBtn.disabled = true;
+  }
+
+  function renderResults(scores){
+    el.resultArea.innerHTML = "";
+
+    const topKey = Object.keys(scores).sort((a,b)=>scores[b]-scores[a])[0];
+    const lowKey = Object.keys(scores).sort((a,b)=>scores[a]-scores[b])[0];
+
+    const summary = document.createElement("div");
+    summary.className = "oknotice";
+    summary.innerHTML = `
+      <b>${escapeHtml(state.nickname)}さんの総合傾向</b><br/>
+      強みは「${labelOf(topKey)}」が出やすい。伸びしろは「${labelOf(lowKey)}」。<br/>
+      ※これは回答内容の言葉づかい・価値観・行動傾向からの“性格傾向”です。
+    `;
+    el.resultArea.appendChild(summary);
+
+    // Per-trait evaluations (<=100 chars) + advice
+    for(const t of TRAITS){
+      const s = scores[t.key];
+      const evalText = cap100(evaluationText(t.label, s));
+      const adv = adviceText(t.key, s);
+
+      const row = document.createElement("div");
+      row.className = "scoreRow";
+      row.innerHTML = `
+        <div>
+          <b>${t.label}</b>
+          <div class="small" style="margin-top:6px;">
+            <span class="tag" style="margin-right:8px;">${s}</span>
+            <span>${escapeHtml(evalText)}</span>
+            <div class="divider"></div>
+            <span><b>アドバイス：</b>${escapeHtml(adv)}</span>
+          </div>
+        </div>
+        <div class="s">/100</div>
+      `;
+      el.resultArea.appendChild(row);
+    }
+
+    const end = document.createElement("div");
+    end.className = "notice";
+    end.innerHTML = `次にやるなら：一番低い項目を“1つだけ”底上げすると全体が整いやすいよ。`;
+    el.resultArea.appendChild(end);
+  }
+
+  function labelOf(key){
+    const t = TRAITS.find(x=>x.key===key);
+    return t ? t.label : key;
+  }
+
+  function cap100(str){
+    // Ensure <= 100 Japanese chars-ish (count as code points)
+    const arr = Array.from(str);
+    if(arr.length <= 100) return str;
+    return arr.slice(0, 98).join("") + "…";
+  }
+
+  function escapeHtml(s){
+    return s
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function resetAll(){
+    stopListening();
+    state.started = false;
+    state.finished = false;
+    state.qIndex = 0;
+    state.answers = [];
+    el.chat.innerHTML = "";
+    el.answerText.value = "";
+    el.readyNotice.style.display = "block";
+    setStatus("準備中", "normal");
+    el.resultTag.textContent = "未作成";
+    el.resultTag.style.background = "rgba(255,122,89,.10)";
+    el.resultTag.style.borderColor = "rgba(255,122,89,.18)";
+    el.resultTag.style.color = "var(--accent2)";
+    el.resultArea.innerHTML = `<div class="small">20問回答すると、7項目の評価（各100文字以内）とアドバイスが表示されます。</div>`;
+    drawRadar({
+      motivation:50,business:50,love:50,communication:50,creativity:50,resilience:50,balance:50
+    });
+    updateProgress();
+    updateControls();
+  }
+
+  // -----------------------------
+  // Events
+  // -----------------------------
+  el.mode.addEventListener("change", () => {
+    state.inputMode = el.mode.value;
+    updateVoiceButtons();
+    if(state.inputMode !== "voice") stopListening();
+    addSystemBubble(`入力モード：${state.inputMode === "voice" ? "音声" : "テキスト"} に切り替えました。`);
+  });
+
+  el.speak.addEventListener("change", () => {
+    state.speak = el.speak.checked;
+    addSystemBubble(`読み上げ：${state.speak ? "ON" : "OFF"} にしました。`);
+  });
+
+  el.startBtn.addEventListener("click", startSession);
+
+  el.sendBtn.addEventListener("click", () => {
+    submitAnswer(el.answerText.value, false);
+  });
+
+  el.skipBtn.addEventListener("click", () => {
+    submitAnswer("", true);
+  });
+
+  el.resetBtn.addEventListener("click", () => {
+    resetAll();
+    addSystemBubble("リセットしました。最初から始められます。");
+  });
+
+  el.answerText.addEventListener("input", updateSendEnabled);
+
+  el.listenBtn.addEventListener("click", () => {
+    if(!state.started){
+      addSystemBubble("先に「開始」を押してね。");
+      speak("先に開始を押してね。");
+      return;
+    }
+    startListening();
+  });
+
+  el.stopBtn.addEventListener("click", stopListening);
+
+  // Enter to send (Ctrl+Enter)
+  el.answerText.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){
+      e.preventDefault();
+      if(!el.sendBtn.disabled) el.sendBtn.click();
+    }
+  });
+
+  // Init
+  state.inputMode = el.mode.value;
+  state.speak = el.speak.checked;
+
+  if(!canUseVoice()){
+    // voice not available
+    el.mode.querySelector('option[value="voice"]').disabled = true;
+    addSystemBubble("この環境では音声入力が使えないため、テキスト入力でご利用ください。");
+  }
+  updateVoiceButtons();
+  resetAll();
+
+})();
+</script>
+
+<script>
+  // PWA: service worker registration
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(console.warn);
+    });
+  }
+</script>
+
+</body>
+</html>
